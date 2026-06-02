@@ -4,7 +4,7 @@
 
 El diagrama de clases se encuentra en el siguiente archivo:
 
-[Ver diagrama de clases](./diagrama-clases.pdf)
+[Ver diagrama de clases](./DiagramaDeClasesAppWeb.drawio(PDF).pdf)
 
 ## 2. Historias de usuario
 
