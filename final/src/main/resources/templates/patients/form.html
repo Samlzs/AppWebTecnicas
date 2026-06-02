@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Paciente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <!--<a class="navbar-brand fw-semibold" th:href="@{/patients}">Somnografias</a>-->
+        <a class="navbar-brand fw-semibold" th:href="@{/}">Somnografias</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" th:href="@{/}">Inicio</a>
+            <a class="nav-link active" th:href="@{/patients}">Pacientes</a>
+            <a class="nav-link" th:href="@{/somnographies}">Somnografias</a>
+            <a class="nav-link" th:href="@{/agenda}">Agenda</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+    <div class="mb-4">
+        <h1 class="h3 mb-1" th:text="${title}">Paciente</h1>
+        <p class="text-secondary mb-0">Los campos marcados como obligatorios deben completarse antes de guardar.</p>
+    </div>
+
+    <form class="bg-white border rounded p-4" method="post" th:action="@{/patients}" th:object="${patient}">
+        <input type="hidden" th:field="*{patientId}">
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label" for="patientName">Nombre *</label>
+                <input class="form-control" id="patientName" type="text" th:field="*{patientName}"
+                       th:classappend="${#fields.hasErrors('patientName')} ? 'is-invalid'" placeholder="Ej: Laura">
+                <div class="form-text">Primer nombre o nombres del paciente.</div>
+                <div class="invalid-feedback" th:errors="*{patientName}"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="patientLastname">Apellido *</label>
+                <input class="form-control" id="patientLastname" type="text" th:field="*{patientLastname}"
+                       th:classappend="${#fields.hasErrors('patientLastname')} ? 'is-invalid'" placeholder="Ej: Gomez">
+                <div class="invalid-feedback" th:errors="*{patientLastname}"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="document">Documento *</label>
+                <input class="form-control" id="document" type="text" th:field="*{document}"
+                       th:classappend="${#fields.hasErrors('document')} ? 'is-invalid'" placeholder="Ej: 123456789">
+                <div class="form-text">Debe ser unico en el sistema.</div>
+                <div class="invalid-feedback" th:errors="*{document}"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="phone">Telefono *</label>
+                <input class="form-control"
+                    id="phone"
+                    type="text"
+                    th:field="*{phone}"
+                    th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'"
+                    maxlength="10"
+                    inputmode="numeric"
+                    pattern="[0-9]{10}"
+                    placeholder="Ej: 3001234567">
+                <div class="form-text">Debe tener exactamente 10 numeros.</div>
+                <div class="invalid-feedback" th:errors="*{phone}"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="email">Correo *</label>
+                <input class="form-control" id="email" type="email" th:field="*{email}"
+                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" placeholder="paciente@correo.com">
+                <div class="invalid-feedback" th:errors="*{email}"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="birthDate">Fecha de nacimiento *</label>
+                <input class="form-control datepicker" id="birthDate" type="text" th:field="*{birthDate}"
+                       th:classappend="${#fields.hasErrors('birthDate')} ? 'is-invalid'" placeholder="yyyy-mm-dd">
+                <div class="invalid-feedback" th:errors="*{birthDate}"></div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <a class="btn btn-outline-secondary" th:href="@{/patients}">Cancelar</a>
+            <button class="btn btn-primary" type="submit">Guardar</button>
+        </div>
+    </form>
+</main>
+
+<footer class="app-footer">
+    <div class="container">
+        <div class="app-footer-inner">
+            <div>
+                <div class="app-footer-title">Somnografias</div>
+                <p class="app-footer-text">
+                    Sistema de gestion de pacientes y estudios del sueño.
+                </p>
+            </div>
+
+            <div class="app-footer-links">
+                <a th:href="@{/}">Inicio</a>
+                <a th:href="@{/patients}">Pacientes</a>
+                <a th:href="@{/somnographies}">Somnografias</a>
+            </div>
+        </div>
+
+        <div class="app-footer-bottom">
+            Proyecto final - Tecnicas de programacion
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

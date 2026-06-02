@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Somnografia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <!--<a class="navbar-brand fw-semibold" th:href="@{/patients}">Somnografias</a>-->
+        <a class="navbar-brand fw-semibold" th:href="@{/}">Somnografias</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" th:href="@{/}">Inicio</a>
+            <a class="nav-link" th:href="@{/patients}">Pacientes</a>
+            <a class="nav-link active" th:href="@{/somnographies}">Somnografias</a>
+            <a class="nav-link" th:href="@{/agenda}">Agenda</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+    <div class="mb-4">
+        <h1 class="h3 mb-1" th:text="${title}">Somnografia</h1>
+        <p class="text-secondary mb-0">Selecciona el paciente y registra los datos principales del estudio.</p>
+    </div>
+
+    <div th:if="${#lists.isEmpty(patients)}" class="alert alert-warning">
+        Antes de registrar una somnografia debes crear al menos un paciente.
+    </div>
+
+    <form class="bg-white border rounded p-4" method="post" th:action="@{/somnographies}" th:object="${somnography}">
+        <input type="hidden" th:field="*{somnographyId}">
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label" for="patient">Paciente *</label>
+                <select class="form-select" id="patient" th:field="*{patient}"
+                        th:classappend="${#fields.hasErrors('patient')} ? 'is-invalid'">
+                    <option value="">Seleccione un paciente</option>
+                    <option th:each="patient : ${patients}" th:value="${patient.patientId}"
+                            th:text="${patient.fullName + ' - ' + patient.document}"></option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{patient}"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="studyDate">Fecha del estudio *</label>
+                <input class="form-control datepicker" id="studyDate" type="text" th:field="*{studyDate}"
+                       th:classappend="${#fields.hasErrors('studyDate')} ? 'is-invalid'" placeholder="yyyy-mm-dd">
+                <div class="invalid-feedback" th:errors="*{studyDate}"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="scheduledDate">Fecha programada en la agenda</label>
+                <input class="form-control datepicker" id="scheduledDate" type="text" th:field="*{scheduledDate}"
+                    placeholder="yyyy-mm-dd">
+                <div class="form-text">Fecha en la que se planea realizar el estudio.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="scheduledTime">Hora programada</label>
+                <input class="form-control" id="scheduledTime" type="time" th:field="*{scheduledTime}">
+                <div class="form-text">Hora aproximada del estudio.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="studyType">Tipo de estudio *</label>
+                <select class="form-select" id="studyType" th:field="*{studyType}"
+                        th:classappend="${#fields.hasErrors('studyType')} ? 'is-invalid'">
+                    <option value="">Seleccione un tipo</option>
+                    <option value="Somnografia basal">Somnografia basal</option>
+                    <option value="Somnografia con titulacion CPAP">Somnografia con titulacion CPAP</option>
+                    <option value="Poligrafia respiratoria">Poligrafia respiratoria</option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{studyType}"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="status">Estado *</label>
+                <select class="form-select" id="status" th:field="*{status}"
+                        th:classappend="${#fields.hasErrors('status')} ? 'is-invalid'">
+                    <option value="">Seleccione un estado</option>
+                    <option value="Registrada">Registrada</option>
+                    <option value="En revision">En revision</option>
+                    <option value="Finalizada">Finalizada</option>
+                    <option value="Anulada">Anulada</option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{status}"></div>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label" for="observations">Observaciones</label>
+                <textarea class="form-control" id="observations" rows="4" th:field="*{observations}"
+                          th:classappend="${#fields.hasErrors('observations')} ? 'is-invalid'"
+                          placeholder="Observaciones clinicas o tecnicas del estudio"></textarea>
+                <div class="invalid-feedback" th:errors="*{observations}"></div>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label" for="result">Resultado *</label>
+                <textarea class="form-control" id="result" rows="4" th:field="*{result}"
+                          th:classappend="${#fields.hasErrors('result')} ? 'is-invalid'"
+                          placeholder="Resumen del resultado obtenido"></textarea>
+                <div class="invalid-feedback" th:errors="*{result}"></div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <a class="btn btn-outline-secondary" th:href="@{/somnographies}">Cancelar</a>
+            <button class="btn btn-primary" type="submit" th:disabled="${#lists.isEmpty(patients)}">Guardar</button>
+        </div>
+    </form>
+</main>
+
+<footer class="app-footer">
+    <div class="container">
+        <div class="app-footer-inner">
+            <div>
+                <div class="app-footer-title">Somnografias</div>
+                <p class="app-footer-text">
+                    Sistema de gestion de pacientes y estudios del sueño.
+                </p>
+            </div>
+
+            <div class="app-footer-links">
+                <a th:href="@{/}">Inicio</a>
+                <a th:href="@{/patients}">Pacientes</a>
+                <a th:href="@{/somnographies}">Somnografias</a>
+            </div>
+        </div>
+
+        <div class="app-footer-bottom">
+            Proyecto final - Tecnicas de programacion
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
